@@ -1,0 +1,444 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Takshit | Neon Frontier</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Orbitron:wght@500;600&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #030712;
+        --bg-alt: #050b1a;
+        --grid: rgba(255, 255, 255, 0.05);
+        --accent: #36f1ff;
+        --accent-2: #ff5fb2;
+        --accent-3: #ffdf6b;
+        --text: #f8fbff;
+        --muted: #a1b0d0;
+        --card: rgba(8, 16, 46, 0.75);
+        --glass: rgba(255, 255, 255, 0.05);
+        --radius: 18px;
+        --shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: radial-gradient(circle at top, rgba(54, 241, 255, 0.18), transparent 50%), linear-gradient(160deg, #040716 0%, #060812 45%, #020410 100%);
+        color: var(--text);
+        overflow-x: hidden;
+      }
+
+      .grid-overlay {
+        position: fixed;
+        inset: 0;
+        background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+        background-size: 120px 120px;
+        opacity: 0.2;
+        pointer-events: none;
+      }
+
+      .page {
+        position: relative;
+        isolation: isolate;
+        padding: 60px clamp(20px, 4vw, 80px) 90px;
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding-bottom: 40px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .logo {
+        font-family: 'Orbitron', sans-serif;
+        letter-spacing: 0.2em;
+        font-size: clamp(1.2rem, 3vw, 1.6rem);
+      }
+
+      nav {
+        display: flex;
+        gap: 26px;
+        font-size: 0.95rem;
+        flex-wrap: wrap;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        transition: color 0.2s ease;
+      }
+
+      nav a:hover {
+        color: var(--accent);
+      }
+
+      .hero {
+        margin-top: 60px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 40px;
+        align-items: center;
+      }
+
+      .hero h1 {
+        font-size: clamp(2.5rem, 5vw, 4.2rem);
+        margin: 0 0 18px;
+        line-height: 1.1;
+      }
+
+      .hero h1 span {
+        color: var(--accent);
+      }
+
+      .hero p {
+        color: var(--muted);
+        max-width: 520px;
+        font-size: 1.1rem;
+        line-height: 1.6;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        margin-top: 24px;
+      }
+
+      button,
+      .ghost-link {
+        border: none;
+        border-radius: var(--radius);
+        padding: 16px 28px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: inherit;
+        transition: transform 0.2s ease, box-shadow 0.3s ease;
+      }
+
+      .primary-btn {
+        background: linear-gradient(120deg, var(--accent), var(--accent-2));
+        color: #05060d;
+        box-shadow: 0 20px 40px rgba(54, 241, 255, 0.3);
+      }
+
+      .primary-btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .ghost-link {
+        background: transparent;
+        color: var(--text);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .scene-card {
+        position: relative;
+        border-radius: calc(var(--radius) + 6px);
+        min-height: 360px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        background: linear-gradient(135deg, rgba(255, 95, 178, 0.4), rgba(54, 241, 255, 0.25));
+      }
+
+      .scene-card::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=80') center/cover;
+        mix-blend-mode: screen;
+        opacity: 0.6;
+      }
+
+      .scene-grid {
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+        background-size: 60px 60px;
+        opacity: 0.4;
+      }
+
+      .metrics {
+        display: flex;
+        gap: clamp(20px, 4vw, 60px);
+        flex-wrap: wrap;
+        margin-top: 50px;
+      }
+
+      .metric-card {
+        flex: 1 1 200px;
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 22px 24px;
+        border: 1px solid rgba(255, 255, 255, 0.07);
+      }
+
+      .metric-card h3 {
+        margin: 0;
+        font-size: 2rem;
+      }
+
+      .metric-card p {
+        margin: 8px 0 0;
+        color: var(--muted);
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.1em;
+      }
+
+      .section-title {
+        margin: 80px 0 30px;
+        font-size: clamp(1.8rem, 4vw, 2.6rem);
+        letter-spacing: 0.05em;
+      }
+
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 24px;
+      }
+
+      .feature-card {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .feature-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 10% 20%, rgba(255, 95, 178, 0.2), transparent 55%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .feature-card:hover::before {
+        opacity: 1;
+      }
+
+      .feature-card h4 {
+        margin: 0 0 8px;
+        font-size: 1.2rem;
+      }
+
+      .feature-card p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .showcase {
+        margin-top: 60px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 20px;
+      }
+
+      .showcase-card {
+        border-radius: var(--radius);
+        background: linear-gradient(145deg, rgba(54, 241, 255, 0.12), rgba(255, 95, 178, 0.12));
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .world-tag {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--accent-3);
+      }
+
+      .cta {
+        margin-top: 80px;
+        padding: 40px;
+        border-radius: var(--radius);
+        background: linear-gradient(120deg, rgba(54, 241, 255, 0.2), rgba(255, 95, 178, 0.2));
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .cta p {
+        margin: 0;
+        max-width: 520px;
+        color: var(--muted);
+      }
+
+      .glow {
+        position: absolute;
+        width: 280px;
+        height: 280px;
+        background: radial-gradient(circle, rgba(54, 241, 255, 0.18), transparent 70%);
+        pointer-events: none;
+        filter: blur(50px);
+        mix-blend-mode: screen;
+        transform: translate(-140px, -140px);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid-overlay"></div>
+    <div class="glow" id="glow"></div>
+    <div class="page">
+      <header>
+        <div class="logo">TAKSHIT</div>
+        <nav>
+          <a href="#world">World</a>
+          <a href="#arsenal">Arsenal</a>
+          <a href="#mission">Mission</a>
+          <a href="#join">Join</a>
+        </nav>
+        <button class="primary-btn">Wishlist</button>
+      </header>
+
+      <section class="hero">
+        <div>
+          <h1>Enter the Neon Frontier of <span>Takshit</span></h1>
+          <p>
+            A hyper-stylized open-world shooter that carries your name through endless cityscapes, dynamic climates, and rival syndicates. Explore districts,
+            take control of sky-lanes, and write the legend of Takshit with every mission you accept.
+          </p>
+          <div class="hero-actions">
+            <button class="primary-btn">Play Reveal Trailer</button>
+            <button class="ghost-link">View Combat Demo</button>
+          </div>
+        </div>
+        <div class="scene-card">
+          <div class="scene-grid"></div>
+        </div>
+      </section>
+
+      <div class="metrics">
+        <div class="metric-card">
+          <h3 id="districts">00</h3>
+          <p>Districts to Claim</p>
+        </div>
+        <div class="metric-card">
+          <h3 id="arsenal">00</h3>
+          <p>Upgradeable Weapons</p>
+        </div>
+        <div class="metric-card">
+          <h3 id="alliances">00</h3>
+          <p>Alliances Possible</p>
+        </div>
+      </div>
+
+      <h2 class="section-title" id="world">World Highlights</h2>
+      <div class="features">
+        <article class="feature-card">
+          <h4>Adaptive Weather Grid</h4>
+          <p>Neon rain, acid fog, aurora storms, and twin suns that shift stealth routes in real time.</p>
+        </article>
+        <article class="feature-card">
+          <h4>Seamless Sky-Lanes</h4>
+          <p>Boost from street chases into anti-gravity rooftops or jet across the skyline without a loading screen.</p>
+        </article>
+        <article class="feature-card">
+          <h4>Faction Reputation</h4>
+          <p>Every mission decision tattoos your name across syndicate radios—alliances respond accordingly.</p>
+        </article>
+        <article class="feature-card">
+          <h4>Neuro-Linked Arsenal</h4>
+          <p>Customize sensory-linked weapons whose personalities evolve with Takshit’s combat style.</p>
+        </article>
+      </div>
+
+      <h2 class="section-title" id="arsenal">Signature Arsenal</h2>
+      <div class="showcase">
+        <div class="showcase-card">
+          <div class="world-tag">PulseEdge V74</div>
+          <p>Takshit’s iconic pulse rifle that harmonizes with player heartbeat for perfect cadence shots.</p>
+        </div>
+        <div class="showcase-card">
+          <div class="world-tag">Phantom Kite</div>
+          <p>Deployable stealth drone that mirrors the player’s name in holographic decoys mid-battle.</p>
+        </div>
+        <div class="showcase-card">
+          <div class="world-tag">GravBloom Blades</div>
+          <p>Floating melee shards that orbit and strike with zero-gravity elegance when combos peak.</p>
+        </div>
+      </div>
+
+      <h2 class="section-title" id="mission">Open-World Mission Loop</h2>
+      <div class="features">
+        <article class="feature-card">
+          <h4>Scan & Stalk</h4>
+          <p>Survey neon alleys, hack broadcasts, and anticipate patrol rhythms before the mission even begins.</p>
+        </article>
+        <article class="feature-card">
+          <h4>Strike & Shift</h4>
+          <p>Switch seamlessly between grounded firefights, glide assaults, and orbital drop-ins.</p>
+        </article>
+        <article class="feature-card">
+          <h4>Claim & Customize</h4>
+          <p>Capture safehouses, inscribe Takshit’s crest, and transform districts into forward bases.</p>
+        </article>
+      </div>
+
+      <section class="cta" id="join">
+        <div>
+          <h3>Become the Legend Named Takshit</h3>
+          <p>
+            Reserve your handle, secure early skins, and help shape the open-world shooter designed entirely around your identity. The frontier waits for no one—
+            upload your name to the control grid now.
+          </p>
+        </div>
+        <div>
+          <button class="primary-btn">Join the Playtest</button>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const counters = [
+        { id: 'districts', target: 26 },
+        { id: 'arsenal', target: 48 },
+        { id: 'alliances', target: 12 }
+      ];
+
+      counters.forEach(counter => {
+        const el = document.getElementById(counter.id);
+        let current = 0;
+        const step = () => {
+          current += Math.ceil(counter.target / 60);
+          if (current >= counter.target) current = counter.target;
+          el.textContent = String(current).padStart(2, '0');
+          if (current < counter.target) requestAnimationFrame(step);
+        };
+        step();
+      });
+
+      const glow = document.getElementById('glow');
+      document.addEventListener('pointermove', event => {
+        glow.style.left = `${event.pageX}px`;
+        glow.style.top = `${event.pageY}px`;
+      });
+    </script>
+  </body>
+</html>
